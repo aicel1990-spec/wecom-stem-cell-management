@@ -1,0 +1,4 @@
+interface:
+  display_name: "企业微信干细胞管理系统"
+  short_description: "设计和迁移干细胞动员采集智能表格、仪表盘与自动化流程"
+  default_prompt: "请使用 $wecom-stem-cell-management 设计或迁移干细胞动员与采集管理系统。"
