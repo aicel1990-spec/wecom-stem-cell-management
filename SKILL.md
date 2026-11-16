@@ -43,6 +43,6 @@ Use this skill to turn a clinical scheduling requirement into a maintainable Ent
 
 Use clinical names that are immediately readable on a phone: `患者姓名`, `诊断`, `负责医生`, `动员开始日期`, `采集规则`, `计划采干时间`, `采干日期（计算）`, `采集状态`, `备注`.
 
-When users want names visible immediately, use native table charts for the three patient lists and label them as lists, not patient counts. The tested component shows at most two category fields and a required numeric statistic, commonly `记录数`; it cannot be treated as a complete multi-column patient detail view. Verify the current tenant's behavior and make this tradeoff explicit. Keep full details in filtered table views. Do not replace `占用名额` with a patient-count field.
+For this workflow's current dashboard, use four native indicator cards that show counts; clicking a count should open the matching patient records. Verify the drill-down and its fields in the target tenant. When users instead want names visible immediately, native table charts are an alternative; the tested table component has only two category fields and a required numeric statistic. Keep full details in filtered table views. Do not replace `占用名额` with a patient-count field.
 
 For detailed field schema, formulas, migration checks, and pressure-test cases, read [references/workflow.md](references/workflow.md).

@@ -75,18 +75,22 @@ Use phone-first ordering. Keep `备注` last unless local workflow needs it earl
 
 Use four cards in a 2x2 layout:
 
-1. `今日采集患者名单`: native table chart, patient name and responsible doctor display.
-2. `明日采集患者名单`: same fields and display.
-3. `采前3天检测患者名单`: same fields and display.
-4. `今日预约总人数（含治疗性单采）`: indicator card for effective bookings on the current date, with the local capacity shown alongside it.
+1. `今日采集患者名单`: indicator card for today's effective collection records.
+2. `明日采集患者名单`: indicator card for tomorrow's effective collection records.
+3. `采前3天检测患者名单`: indicator card for effective records whose pre-collection testing date is today.
+4. `今日预约总人数（含治疗性单采）`: indicator card for effective bookings on the current date, including therapeutic apheresis, with the local capacity shown alongside it.
 
-Set each list chart's filter directly on its fields where supported: collection date is today or tomorrow, or the pre-3-day test date is today, and `占用名额 = 1`. In one tenant, charts referencing a shared view retained stale rows after records changed even though the view updated; direct field filters updated in the observed tests. This observation does not establish a platform-wide cause or guarantee. Test the current tenant rather than assuming either method refreshes correctly. For the count card, verify both the current-date condition and the numeric `占用名额 = 1` value have persisted; an empty comparison value can silently give a misleading result.
+Each card displays a number; clicking the number should open its corresponding filtered patient-record details. Configure native indicator cards with the appropriate source and record count. When converting an existing table chart, check that both filters and record-count aggregation remain intact after saving. In the observed desktop tests, a converted today card in the test copy and a nonzero pre-3-day card in the production table opened matching synthetic records. A nonzero tomorrow card and mobile behavior were not separately verified; test them in the destination tenant rather than assuming they work.
 
-Use a synthetic record to verify entry into and departure from today's, tomorrow's and pre-3-day lists after changing the date, and verify cancellation removes the record and frees the slot. Check doctor display with a manual name and, separately, a directory member if safely available. Record the original field values and restore them after testing. Do not send test messages to colleagues without authorization. Verify cross-day refresh, mobile display and scheduled notification delivery separately; an immediate desktop refresh is not proof of these behaviors.
+Check that today’s details make available `患者姓名`, `诊断`, `负责医生`, `动员开始日期`, `采集规则`, `采集类型`, `采集状态`, `MNC/Kg`, `CD34+细胞比例` and `CD34+细胞/Kg`. Tomorrow’s details should make available the first five of those fields and `采集状态`. Pre-3-day testing details should make available patient name, responsible doctor, planned collection date and testing date. The native detail panel may require horizontal scrolling; verify the fields are actually accessible and explain any platform limitations.
+
+Set each card's filter directly on its fields where supported: collection date is today or tomorrow, or the pre-3-day test date is today, and `占用名额 = 1`. In one tenant, charts referencing a shared view retained stale rows after records changed even though the view updated; direct field filters updated in the observed tests. This observation does not establish a platform-wide cause or guarantee. Test the current tenant rather than assuming either method refreshes correctly. For the total count card, verify both the current-date condition and the numeric `占用名额 = 1` value have persisted; an empty comparison value can silently give a misleading result.
+
+Use synthetic records to verify each nonzero count, click each number and compare the opened records and required patient fields with the source. Verify entry and departure after a date change, cancellation and the total count including therapeutic apheresis. Check doctor display with a manual name and, separately, a directory member if safely available. Record the original field values and restore them after testing. Do not send test messages to colleagues without authorization. Verify cross-day refresh, mobile display and scheduled notification delivery separately; an immediate desktop refresh is not proof of these behaviors.
 
 In the tested native table component, two category fields and a numeric statistic are available; the required `记录数` column could not be hidden or changed to a text diagnosis. Do not claim that all requested patient fields appear directly on the dashboard. Use a separate ordinary detail view for diagnosis, dates, status, collection type and results, and explain this limitation before choosing the presentation. The doctor display field may prefer a directory member and fall back to a manually entered name; a manual name alone cannot receive member-targeted automation.
 
-Use consistent card sizes, legible contrast and a layout suitable for the local screen. Verify mobile readability separately; an empty-state screenshot alone does not prove rows render correctly. If a user prefers a clean dashboard over direct names, links to the detail views are another option, subject to their preference.
+Use consistent card sizes, legible contrast and a layout suitable for the local screen. Verify mobile readability separately; an empty-state screenshot alone does not prove rows render correctly. If users request a different presentation, agree the tradeoff before replacing the numeric cards.
 
 ## Automation plan
 
