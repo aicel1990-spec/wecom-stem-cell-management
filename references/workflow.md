@@ -75,12 +75,16 @@ Use phone-first ordering. Keep `备注` last unless local workflow needs it earl
 
 Use four cards in a 2x2 layout:
 
-1. `今日采集患者数`: responsible doctor, patient name, row count.
-2. `明日采集患者数`: patient name, row count.
-3. `采前3天检测患者数`: patient name, row count.
-4. `今日已预约采干数量`: indicator card using the capacity/booking source.
+1. `今日采集患者名单`: native table chart, patient name and responsible doctor display.
+2. `明日采集患者名单`: same fields and display.
+3. `采前3天检测患者名单`: same fields and display.
+4. `今日预约总人数（含治疗性单采）`: indicator card for effective bookings on the current date, with the local capacity shown alongside it.
 
-Use a restrained blue theme, medium row height, consistent card sizes, and enough contrast for mobile viewing. If the native aggregate label remains `记录数`, the card title supplies the clinical meaning; keep the underlying row-count calculation unchanged.
+Use the saved, shared detail view as each list chart's filter where supported: collection date is today or tomorrow, or the pre-3-day test date is today, and `占用名额 = 1`. Verify the actual saved view filters and the chart's selected view after refresh. For the count card, verify both the current-date condition and the numeric `占用名额 = 1` value have persisted; an empty comparison value can silently give a misleading result.
+
+In the tested native table component, two category fields and a numeric statistic are available; the required `记录数` column could not be hidden or changed to a text diagnosis. Do not claim that all requested patient fields appear directly on the dashboard. Use a separate ordinary detail view for diagnosis, dates, status, collection type and results, and explain this limitation before choosing the presentation. The doctor display field may prefer a directory member and fall back to a manually entered name; a manual name alone cannot receive member-targeted automation.
+
+Use consistent card sizes, legible contrast and a layout suitable for the local screen. Verify mobile readability separately; an empty-state screenshot alone does not prove rows render correctly. If a user prefers a clean dashboard over direct names, links to the detail views are another option, subject to their preference.
 
 ## Automation plan
 
@@ -90,6 +94,8 @@ Default rules to configure and verify:
 - At collection-day minus 1 day, send the responsible doctor the next-day collection list.
 - On collection day, send or expose the today's list when supported.
 - On cancellation or restoration, update the collection status and preserve the reason.
+
+For member-targeted reminders, require a populated directory-person field and an active booking where appropriate. A display fallback or manually typed name is not a notification recipient. Keep duplicate and test flows disabled, and verify each active rule's recipient, trigger date and time after saving. A saved configuration is not proof that a scheduled message was delivered.
 
 Document-dynamic reminders may appear in the table's activity stream without creating an Android lock-screen notification. Treat lock-screen delivery, native popup behavior, true calendar synchronization, and hard capacity blocking as separate capabilities that require live testing or an Enterprise WeChat app/API.
 
